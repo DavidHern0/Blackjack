@@ -2,13 +2,10 @@ let dealerSum = 0;
 let yourSum = 0;
 let dealerAceCount = 0;
 let yourAceCount = 0;
-
 let hidden;
 let deck;
 
-let canHit = true;
-
-
+/////////////////// DECK BUILDING
 
 function buildDeck() {
     let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
@@ -30,6 +27,8 @@ function shuffleDeck() {
         deck[j] = temp;
     }
 }
+
+/////////////////// CARD VALUES
 
 function getValue(card) {
     let data = card.split("-");
@@ -59,51 +58,66 @@ function reduceAce(playerSum, playerAceCount) {
     return playerSum;
 }
 
+/////////////////// BUTTON HIT
+
 function hit() {
-    if (!canHit) {
-        return;
-    }
-    
-    let cardImg = document.createElement("img");
-    let card = deck.pop();
-    cardImg.src = "./cards/" + card + ".png";
-    yourSum += getValue(card);
-    yourAceCount += checkAce(card);
-    document.getElementById("your-cards").append(cardImg);
-
+    dealCards("PLAYER");
     if (reduceAce(yourSum, yourAceCount) > 21) {
-        canHit = false;
+        document.getElementById("hit").disabled = true;
     }
-
+    document.getElementById("your-sum").innerText = yourSum;
 }
 
+/////////////////// BUTTON STAY
+
 function stay() {
+    
+    while (dealerSum < 17) {
+        dealCards("IA");
+    }
+
     dealerSum = reduceAce(dealerSum, dealerAceCount);
     yourSum = reduceAce(yourSum, yourAceCount);
 
-    canHit = false;
     document.getElementById("hidden").src = "./cards/" + hidden + ".png"
 
     let message = "";
-    if(yourSum > 21) {
-        message = "You lose!";
-    }
-    else if(dealerSum > 21) {
-        message = "You win!"
-    }
-    else if (yourSum == dealerSum) {
-        message = "Tie!"
-    }
-    else if (yourSum > dealerSum) {
-        message = "You win!"
-    }
-    else if (yourSum < dealerSum) {
-        message = "You lose!"
+    if (yourSum > 21 || dealerSum > 21) {
+        message = yourSum > 21 ? "You lose!" : "You win!";
+    } else if (yourSum === dealerSum) {
+        message = "Tie!";
+    } else {
+        message = yourSum > dealerSum ? "You win!" : "You lose!";
     }
 
     document.getElementById("dealer-sum").innerText = dealerSum;
-    document.getElementById("your-sum").innerText = yourSum;
     document.getElementById("results").innerText = message;
+
+    document.getElementById("hit").disabled = true;
+    document.getElementById("stay").disabled = true;
+}
+
+/////////////////// DEAL CARDS
+
+function dealCards(player) {
+    let cardImg = document.createElement("img");
+    let card = deck.pop();
+    cardImg.src = "./cards/" + card + ".png";
+    if (player === "IA") {
+        dealerSum += getValue(card);
+        dealerAceCount += checkAce(card);
+        document.getElementById("dealer-cards").append(cardImg);
+    } else {
+        yourSum += getValue(card);
+        yourAceCount += checkAce(card);
+        document.getElementById("your-cards").append(cardImg);
+    }
+}
+
+function blackjack_action() {
+    if (yourSum >= 21) {
+        stay();
+    }
 }
 
 function startGame() {
@@ -111,33 +125,26 @@ function startGame() {
     dealerSum += getValue(hidden);
     dealerAceCount += checkAce(hidden);
 
-    while (dealerSum < 17) {
-        let cardImg = document.createElement("img");
-        let card = deck.pop();
-        cardImg.src = "./cards/" + card + ".png";
-        dealerSum += getValue(card);
-        dealerAceCount += checkAce(card);
-        document.getElementById("dealer-cards").append(cardImg);
-    }
-
     for (let i = 0; i < 2; i++) {
-        let cardImg = document.createElement("img");
-        let card = deck.pop();
-        cardImg.src = "./cards/" + card + ".png";
-        yourSum += getValue(card);
-        yourAceCount += checkAce(card);
-        document.getElementById("your-cards").append(cardImg);
+        dealCards("PLAYER");
     }
 
+    
+    document.getElementById("dealer-sum").innerText = "???";
+    document.getElementById("your-sum").innerText = yourSum;
     document.getElementById("hit").addEventListener("click", hit);
     document.getElementById("stay").addEventListener("click", stay);
-
-
+    let buttons = document.getElementsByClassName("blackjack_button");
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener("click", blackjack_action);
+    }
 }
-
 
 window.onload = function () {
     buildDeck();
     shuffleDeck();
     startGame();
-}
+    if (yourSum === 21) {
+        stay();
+    }
+};
