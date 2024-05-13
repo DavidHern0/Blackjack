@@ -74,29 +74,25 @@ function stay() {
         document.getElementById("hidden").src = "./cards/" + hidden + ".png";
         document.getElementById("dealer-sum").innerText = dealerSum;
 
-        let i = 1;
+        let i = 0;
         let revealInterval = setInterval(function () {
-            let card = deck.pop();
-            let cardImg = document.createElement("img");
-            cardImg.src = "./cards/" + card + ".png";
-            document.getElementById("dealer-cards").appendChild(cardImg);
+            if (i < 1 || dealerSum < 17) {
+                let cardImg = document.createElement("img");
+                cardImg.src = "./cards/back.png";
+                document.getElementById("dealer-cards").appendChild(cardImg);
 
-            dealerSum += getValue(card);
-            dealerAceCount += checkAce(card);
-
-            if (dealerSum > 21) {
+                setTimeout(function () {
+                    let card = deck.pop();
+                    let cardImg = document.createElement("img");
+                    cardImg.src = "./cards/" + card + ".png";
+                    document.getElementById("dealer-cards").replaceChild(cardImg, document.getElementById("dealer-cards").lastChild);
+                    dealerSum += getValue(card);
+                    dealerAceCount += checkAce(card);
+                    document.getElementById("dealer-sum").innerText = dealerSum;
+                }, 1000);
+                i++;
+            } else {
                 clearInterval(revealInterval);
-                document.getElementById("dealer-sum").innerText = dealerSum;
-                document.getElementById("results").innerText = "You win!";
-            }
-
-            document.getElementById("dealer-sum").innerText = dealerSum;
-
-            i++;
-            if (dealerSum >= 17 || i >= 3) {
-                clearInterval(revealInterval);
-
-                // Reduce the value of dealer's aces if necessary
                 dealerSum = reduceAce(dealerSum, dealerAceCount);
 
                 let message = "";
@@ -116,13 +112,28 @@ function stay() {
 /////////////////// DEAL CARDS
 
 function dealCards() {
+    document.getElementById("hit").disabled = true;
+    document.getElementById("stay").disabled = true;
+
+    let playerCards = document.getElementById("your-cards");
+
     let cardImg = document.createElement("img");
-    let card = deck.pop();
-    cardImg.src = "./cards/" + card + ".png";
-    yourSum += getValue(card);
-    yourAceCount += checkAce(card);
-    document.getElementById("your-cards").append(cardImg);
+    cardImg.src = "./cards/back.png";
+    playerCards.appendChild(cardImg);
+
+    setTimeout(function () {
+        let card = deck.pop();
+        let cardImg = document.createElement("img");
+        cardImg.src = "./cards/" + card + ".png";
+        playerCards.replaceChild(cardImg, playerCards.lastChild);
+        yourSum += getValue(card);
+        yourAceCount += checkAce(card);
+        document.getElementById("your-sum").innerText = yourSum;
+        document.getElementById("stay").disabled = false;
+        document.getElementById("hit").disabled = yourSum >= 21;
+    }, 1000);
 }
+
 
 function blackjack_action() {
     if (yourSum >= 21) {
@@ -131,15 +142,48 @@ function blackjack_action() {
     document.getElementById("your-sum").innerText = yourSum;
 }
 
+function revealPlayerCards() {
+    let playerCards = document.getElementById("your-cards");
+    let i = 0;
+    let revealInterval = setInterval(function () {
+        if (i < 2) {
+
+            let cardImg = document.createElement("img");
+            cardImg.src = "./cards/back.png";
+            playerCards.appendChild(cardImg);
+
+            setTimeout(function () {
+                let card = deck.pop();
+                let cardImg = document.createElement("img");
+                cardImg.src = "./cards/" + card + ".png";
+                playerCards.replaceChild(cardImg, playerCards.lastChild);
+                yourSum += getValue(card);
+                yourAceCount += checkAce(card);
+                document.getElementById("your-sum").innerText = yourSum;
+                if (i === 2) {
+                    document.getElementById("hit").disabled = false;
+                    document.getElementById("stay").disabled = false;
+                }
+                if (yourSum === 21) {
+                    document.getElementById("hit").disabled = true;
+                }
+            }, 1000);
+            i++;
+        } else {
+            clearInterval(revealInterval);
+        }
+    }, 1500);
+}
+
 function startGame() {
     hidden = deck.pop();
     dealerSum += getValue(hidden);
     dealerAceCount += checkAce(hidden);
 
-    for (let i = 0; i < 2; i++) {
-        dealCards();
-    }
+    document.getElementById("hit").disabled = true;
+    document.getElementById("stay").disabled = true;
 
+    revealPlayerCards();
 
     document.getElementById("dealer-sum").innerText = "???";
     document.getElementById("your-sum").innerText = yourSum;
@@ -155,9 +199,6 @@ window.onload = function () {
     buildDeck();
     shuffleDeck();
     startGame();
-    if (yourSum === 21) {
-        document.getElementById("hit").disabled = true;
-    }
 };
 
 document.addEventListener('DOMNodeInserted', function (event) {
