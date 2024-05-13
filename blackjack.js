@@ -61,63 +61,74 @@ function reduceAce(playerSum, playerAceCount) {
 /////////////////// BUTTON HIT
 
 function hit() {
-    dealCards("PLAYER");
-    if (reduceAce(yourSum, yourAceCount) > 21) {
-        document.getElementById("hit").disabled = true;
-    }
-    document.getElementById("your-sum").innerText = yourSum;
+    dealCards();
 }
 
 /////////////////// BUTTON STAY
 
 function stay() {
-    
-    while (dealerSum < 17) {
-        dealCards("IA");
-    }
-
-    dealerSum = reduceAce(dealerSum, dealerAceCount);
-    yourSum = reduceAce(yourSum, yourAceCount);
-
-    document.getElementById("hidden").src = "./cards/" + hidden + ".png"
-
-    let message = "";
-    if (yourSum > 21 || dealerSum > 21) {
-        message = yourSum > 21 ? "You lose!" : "You win!";
-    } else if (yourSum === dealerSum) {
-        message = "Tie!";
-    } else {
-        message = yourSum > dealerSum ? "You win!" : "You lose!";
-    }
-
-    document.getElementById("dealer-sum").innerText = dealerSum;
-    document.getElementById("results").innerText = message;
-
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
+
+    setTimeout(function () {
+        document.getElementById("hidden").src = "./cards/" + hidden + ".png";
+        document.getElementById("dealer-sum").innerText = dealerSum;
+
+        let i = 1;
+        let revealInterval = setInterval(function () {
+            let card = deck.pop();
+            let cardImg = document.createElement("img");
+            cardImg.src = "./cards/" + card + ".png";
+            document.getElementById("dealer-cards").appendChild(cardImg);
+
+            dealerSum += getValue(card);
+            dealerAceCount += checkAce(card);
+
+            if (dealerSum > 21) {
+                clearInterval(revealInterval);
+                document.getElementById("dealer-sum").innerText = dealerSum;
+                document.getElementById("results").innerText = "You win!";
+            }
+
+            document.getElementById("dealer-sum").innerText = dealerSum;
+
+            i++;
+            if (dealerSum >= 17 || i >= 3) {
+                clearInterval(revealInterval);
+
+                // Reduce the value of dealer's aces if necessary
+                dealerSum = reduceAce(dealerSum, dealerAceCount);
+
+                let message = "";
+                if (yourSum > 21 || dealerSum > 21) {
+                    message = yourSum > 21 ? "You lose!" : "You win!";
+                } else if (yourSum === dealerSum) {
+                    message = "Tie!";
+                } else {
+                    message = yourSum > dealerSum ? "You win!" : "You lose!";
+                }
+                document.getElementById("results").innerText = message;
+            }
+        }, 1500);
+    }, 1000);
 }
 
 /////////////////// DEAL CARDS
 
-function dealCards(player) {
+function dealCards() {
     let cardImg = document.createElement("img");
     let card = deck.pop();
     cardImg.src = "./cards/" + card + ".png";
-    if (player === "IA") {
-        dealerSum += getValue(card);
-        dealerAceCount += checkAce(card);
-        document.getElementById("dealer-cards").append(cardImg);
-    } else {
-        yourSum += getValue(card);
-        yourAceCount += checkAce(card);
-        document.getElementById("your-cards").append(cardImg);
-    }
+    yourSum += getValue(card);
+    yourAceCount += checkAce(card);
+    document.getElementById("your-cards").append(cardImg);
 }
 
 function blackjack_action() {
     if (yourSum >= 21) {
-        stay();
+        document.getElementById("hit").disabled = true;
     }
+    document.getElementById("your-sum").innerText = yourSum;
 }
 
 function startGame() {
@@ -126,10 +137,10 @@ function startGame() {
     dealerAceCount += checkAce(hidden);
 
     for (let i = 0; i < 2; i++) {
-        dealCards("PLAYER");
+        dealCards();
     }
 
-    
+
     document.getElementById("dealer-sum").innerText = "???";
     document.getElementById("your-sum").innerText = yourSum;
     document.getElementById("hit").addEventListener("click", hit);
@@ -145,6 +156,12 @@ window.onload = function () {
     shuffleDeck();
     startGame();
     if (yourSum === 21) {
-        stay();
+        document.getElementById("hit").disabled = true;
     }
 };
+
+document.addEventListener('DOMNodeInserted', function (event) {
+    if (event.target.tagName && event.target.tagName.toLowerCase() === 'img') {
+        event.target.setAttribute("draggable", "false");
+    }
+});
