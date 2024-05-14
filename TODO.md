@@ -4,7 +4,7 @@
  [ ] Add Styles
  [ ] Sounds
  [ ] 'Play Again' Functionality
- [ ] Fix 'Ace' Card
+ [x] Fix 'Ace' Card
  [x] Deal Cards Animation
  [x] Show Cards Animation (Dealer)
  [x] Show Cards Animation (Player)
