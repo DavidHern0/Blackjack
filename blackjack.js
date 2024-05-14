@@ -1,7 +1,7 @@
 let dealerSum = 0;
 let yourSum = 0;
-let dealerAceCount = 0;
-let yourAceCount = 0;
+let yourAceDecrease = true;
+let dealerAceDecrease = true;
 let hidden;
 let deck;
 
@@ -30,32 +30,21 @@ function shuffleDeck() {
 
 /////////////////// CARD VALUES
 
-function getValue(card) {
+function getValue(card, playerSum) {
     let data = card.split("-");
     let value = data[0];
 
     if (isNaN(value)) {
-        if (value == "A") {
-            return 11;
+        if (value === "A") {
+            if (playerSum + 11 <= 21) {
+                return 11;
+            } else {
+                return 1;
+            }
         }
         return 10;
     }
     return parseInt(value);
-}
-
-function checkAce(card) {
-    if (card[0] == "A") {
-        return 1;
-    }
-    return 0;
-}
-
-function reduceAce(playerSum, playerAceCount) {
-    while (playerSum > 21 && playerAceCount > 0) {
-        playerSum -= 10;
-        playerAceCount -= 1;
-    }
-    return playerSum;
 }
 
 /////////////////// BUTTON HIT
@@ -86,14 +75,25 @@ function stay() {
                     let cardImg = document.createElement("img");
                     cardImg.src = "./cards/" + card + ".png";
                     document.getElementById("dealer-cards").replaceChild(cardImg, document.getElementById("dealer-cards").lastChild);
-                    dealerSum += getValue(card);
-                    dealerAceCount += checkAce(card);
+
+                    dealerSum += getValue(card, dealerSum);
+
+                    if (dealerSum > 21) {
+                        let dealerCards = document.getElementById("dealer-cards").getElementsByTagName("img");
+                        for (let j = 0; j < dealerCards.length; j++) {
+                            let cardSrc = dealerCards[j].getAttribute("src");
+                            if (cardSrc.includes("A") && dealerAceDecrease) {
+                                dealerAceDecrease = false;
+                                dealerSum -= 10;
+                                break;
+                            }
+                        }
+                    }
                     document.getElementById("dealer-sum").innerText = dealerSum;
                 }, 1000);
                 i++;
             } else {
                 clearInterval(revealInterval);
-                dealerSum = reduceAce(dealerSum, dealerAceCount);
 
                 let message = "";
                 if (yourSum > 21 || dealerSum > 21) {
@@ -126,14 +126,26 @@ function dealCards() {
         let cardImg = document.createElement("img");
         cardImg.src = "./cards/" + card + ".png";
         playerCards.replaceChild(cardImg, playerCards.lastChild);
-        yourSum += getValue(card);
-        yourAceCount += checkAce(card);
+
+        yourSum += getValue(card, yourSum);
+
+        if (yourSum > 21) {
+            let yourCards = document.getElementById("your-cards").getElementsByTagName("img");
+            for (let j = 0; j < yourCards.length; j++) {
+                let cardSrc = yourCards[j].getAttribute("src");
+                if (cardSrc.includes("A") && yourAceDecrease) {
+                    yourAceDecrease = false;
+                    yourSum -= 10;
+                    break;
+                }
+            }
+        }
         document.getElementById("your-sum").innerText = yourSum;
         document.getElementById("stay").disabled = false;
         document.getElementById("hit").disabled = yourSum >= 21;
     }, 1000);
+    document.getElementById("your-sum").innerText = yourSum;
 }
-
 
 function blackjack_action() {
     if (yourSum >= 21) {
@@ -157,8 +169,8 @@ function revealPlayerCards() {
                 let cardImg = document.createElement("img");
                 cardImg.src = "./cards/" + card + ".png";
                 playerCards.replaceChild(cardImg, playerCards.lastChild);
-                yourSum += getValue(card);
-                yourAceCount += checkAce(card);
+
+                yourSum += getValue(card, yourSum);
                 document.getElementById("your-sum").innerText = yourSum;
                 if (i === 2) {
                     document.getElementById("hit").disabled = false;
@@ -177,8 +189,7 @@ function revealPlayerCards() {
 
 function startGame() {
     hidden = deck.pop();
-    dealerSum += getValue(hidden);
-    dealerAceCount += checkAce(hidden);
+    dealerSum += getValue(hidden, dealerSum);
 
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
