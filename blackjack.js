@@ -1,61 +1,41 @@
-let dealerSum = 0;
-let yourSum = 0;
-let aceCount = 0;
-let start = true;
-let hidden;
-let deck;
-
-/////////////////// DECK BUILDING
+let dealerSum = 0,
+    yourSum = 0,
+    aceCount = 0,
+    start = true,
+    hidden,
+    deck;
 
 function buildDeck() {
-    let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-    let types = ["C", "D", "H", "S"];
+    const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+    const types = ["C", "D", "H", "S"];
     deck = [];
 
-    for (let i = 0; i < types.length; i++) {
-        for (let j = 0; j < values.length; j++) {
-            deck.push(values[j] + "-" + types[i]);
+    for (let type of types) {
+        for (let value of values) {
+            deck.push(`${value}-${type}`);
         }
     }
 }
 
 function shuffleDeck() {
-    for (let i = 0; i < deck.length; i++) {
-        let j = Math.floor(Math.random() * deck.length);
-        let temp = deck[i];
-        deck[i] = deck[j];
-        deck[j] = temp;
+    for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
     }
 }
-
-/////////////////// CARD VALUES
 
 function getValue(card, playerSum) {
-    let data = card.split("-");
-    let value = data[0];
-
-    if (isNaN(value)) {
-        if (value === "A") {
-            return 11;
-        }
-        return 10;
-    }
-    return parseInt(value);
+    const value = parseInt(card) || (card === "A" ? 11 : 10);
+    return value;
 }
-
-/////////////////// BUTTON HIT
 
 function hit() {
     handleCardDealing(true);
 }
 
-/////////////////// BUTTON STAY
-
 function stay() {
     handleCardDealing(false);
 }
-
-/////////////////// ENDGAME HANDLE
 
 function endGame() {
     let message = "";
@@ -69,25 +49,21 @@ function endGame() {
     document.getElementById("results").innerText = message;
 }
 
-
-/////////////////// INGAME HANDLE
-
 function handleCardDealing(isPlayer) {
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
 
     if (isPlayer) {
-        let playerCards = document.getElementById("your-cards");
+        const playerCards = document.getElementById("your-cards");
         dealCard(playerCards, yourSum, true);
     } else {
-        setTimeout(function () {
-            document.getElementById("hidden").src = "./cards/" + hidden + ".png";
+        setTimeout(() => {
+            document.getElementById("hidden").src = `./cards/${hidden}.png`;
             document.getElementById("dealer-sum").innerText = dealerSum;
-
             let i = 0;
-            let revealInterval = setInterval(function () {
+            const revealInterval = setInterval(() => {
                 if (i < 1 || dealerSum < 17) {
-                    let dealerCards = document.getElementById("dealer-cards");
+                    const dealerCards = document.getElementById("dealer-cards");
                     dealCard(dealerCards, dealerSum, false);
                     i++;
                 } else {
@@ -100,18 +76,17 @@ function handleCardDealing(isPlayer) {
 }
 
 function dealCard(cardsContainer, sum, isPlayer) {
-    let cardImg = document.createElement("img");
+    const cardImg = document.createElement("img");
     cardImg.src = "./cards/back.png";
     cardsContainer.appendChild(cardImg);
 
-    setTimeout(function () {
-        let card = deck.pop();
-        let cardImg = document.createElement("img");
-        cardImg.src = "./cards/" + card + ".png";
+    setTimeout(() => {
+        const card = deck.pop();
+        const cardImg = document.createElement("img");
+        cardImg.src = `./cards/${card}.png`;
         cardsContainer.replaceChild(cardImg, cardsContainer.lastChild);
 
-        let cardValue = getValue(card, sum);
-
+        const cardValue = getValue(card, sum);
         sum += cardValue;
 
         if (cardValue === 11) {
@@ -148,9 +123,9 @@ function blackjack_action() {
 }
 
 function revealPlayerCards() {
-    let playerCards = document.getElementById("your-cards");
+    const playerCards = document.getElementById("your-cards");
     let i = 0;
-    let revealInterval = setInterval(function () {
+    const revealInterval = setInterval(() => {
         if (i < 2) {
             dealCard(playerCards, yourSum, true);
             i++;
@@ -176,13 +151,13 @@ function startGame() {
     document.getElementById("your-sum").innerText = yourSum;
     document.getElementById("hit").addEventListener("click", hit);
     document.getElementById("stay").addEventListener("click", stay);
-    let buttons = document.getElementsByClassName("blackjack_button");
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener("click", blackjack_action);
+    const buttons = document.getElementsByClassName("blackjack_button");
+    for (let button of buttons) {
+        button.addEventListener("click", blackjack_action);
     }
 }
 
-window.onload = function () {
+window.onload = () => {
     buildDeck();
     shuffleDeck();
     startGame();
