@@ -1,7 +1,5 @@
 let dealerSum = 0;
 let yourSum = 0;
-let yourAceDecrease = true;
-let dealerAceDecrease = true;
 let hidden;
 let deck;
 
@@ -80,13 +78,9 @@ function stay() {
 
                     if (dealerSum > 21) {
                         let dealerCards = document.getElementById("dealer-cards").getElementsByTagName("img");
-                        for (let j = 0; j < dealerCards.length; j++) {
-                            let cardSrc = dealerCards[j].getAttribute("src");
-                            if (cardSrc.includes("A") && dealerAceDecrease) {
-                                dealerAceDecrease = false;
-                                dealerSum -= 10;
-                                break;
-                            }
+                        let dealerAceCount = countAces(dealerCards);
+                        if (dealerAceCount >= 2) {
+                            dealerSum -= 10;
                         }
                     }
                     document.getElementById("dealer-sum").innerText = dealerSum;
@@ -109,8 +103,6 @@ function stay() {
     }, 1000);
 }
 
-/////////////////// DEAL CARDS
-
 function dealCards() {
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
@@ -131,13 +123,9 @@ function dealCards() {
 
         if (yourSum > 21) {
             let yourCards = document.getElementById("your-cards").getElementsByTagName("img");
-            for (let j = 0; j < yourCards.length; j++) {
-                let cardSrc = yourCards[j].getAttribute("src");
-                if (cardSrc.includes("A") && yourAceDecrease) {
-                    yourAceDecrease = false;
-                    yourSum -= 10;
-                    break;
-                }
+            let yourAceCount = countAces(yourCards);
+            if (yourAceCount >= 2) {
+                yourSum -= 10;
             }
         }
         document.getElementById("your-sum").innerText = yourSum;
@@ -146,6 +134,18 @@ function dealCards() {
     }, 1000);
     document.getElementById("your-sum").innerText = yourSum;
 }
+
+function countAces(cards) {
+    let aceCount = 0;
+    for (let j = 0; j < cards.length; j++) {
+        let cardSrc = cards[j].getAttribute("src");
+        if (cardSrc.includes("A")) {
+            aceCount++;
+        }
+    }
+    return aceCount;
+}
+
 
 function blackjack_action() {
     if (yourSum >= 21) {
