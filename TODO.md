@@ -10,6 +10,7 @@
  [x] Show Cards Animation (Player)
 
  ## To-Do List (Temporary)
- [ ] Optimize Show Cards Code
+ [x] Optimize Show Cards Code
+ [ ] Optimize all Code
  [ ] Fix Deprecated Code
  [ ] Fix Code
