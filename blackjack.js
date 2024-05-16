@@ -6,15 +6,16 @@ let dealerSum = 0,
     hidden2,
     deck,
     wins = parseInt(localStorage.getItem('wins')) || 0
-    losses = parseInt(localStorage.getItem('losses')) || 0;
+    losses = parseInt(localStorage.getItem('losses')) || 0,
+    ties = parseInt(localStorage.getItem('ties')) || 0;
 
 function updateCounters() {
     document.getElementById("wins").innerText = wins;
     document.getElementById("losses").innerText = losses;
     localStorage.setItem('wins', wins);
     localStorage.setItem('losses', losses);
+    localStorage.setItem('ties', ties);
 }
-
 function buildDeck() {
     const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
     const types = ["C", "D", "H", "S"];
@@ -60,6 +61,7 @@ function endGame() {
         wins++;
     } else {
         message = "Tie!";
+        ties++;
     }
     updateCounters();
     document.getElementById("results").innerText = message;
