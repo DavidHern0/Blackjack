@@ -24,8 +24,8 @@ function shuffleDeck() {
     }
 }
 
-function getValue(card, playerSum) {
-    const value = parseInt(card) || (card === "A" ? 11 : 10);
+function getValue(card) {
+    const value = parseInt(card) || (card[0] === "A" ? 11 : 10);
     return value;
 }
 
@@ -86,9 +86,11 @@ function dealCard(cardsContainer, sum, isPlayer) {
         cardImg.src = `./cards/${card}.png`;
         cardsContainer.replaceChild(cardImg, cardsContainer.lastChild);
 
-        const cardValue = getValue(card, sum);
+        const cardValue = getValue(card);
         sum += cardValue;
 
+        console.log("cardValue"+cardValue)
+        console.log("sum"+sum)
         if (cardValue === 11) {
             aceCount++;
         }
@@ -140,7 +142,7 @@ function revealPlayerCards() {
 
 function startGame() {
     hidden = deck.pop();
-    dealerSum += getValue(hidden, dealerSum);
+    dealerSum += getValue(hidden);
 
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
