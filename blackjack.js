@@ -4,7 +4,16 @@ let dealerSum = 0,
     start = true,
     hidden,
     hidden2,
-    deck;
+    deck,
+    wins = parseInt(localStorage.getItem('wins')) || 0
+    losses = parseInt(localStorage.getItem('losses')) || 0;
+
+function updateCounters() {
+    document.getElementById("wins").innerText = wins;
+    document.getElementById("losses").innerText = losses;
+    localStorage.setItem('wins', wins);
+    localStorage.setItem('losses', losses);
+}
 
 function buildDeck() {
     const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
@@ -39,14 +48,20 @@ function stay() {
 }
 
 function endGame() {
-    let message = "";
-    if (yourSum > 21 || dealerSum > 21) {
-        message = yourSum > 21 ? "You lose!" : "You win!";
-    } else if (yourSum === dealerSum) {
-        message = "Tie!";
+    let message;
+    if (yourSum > 21) {
+        message = "You lose!";
+    } else if (dealerSum <= 21 && yourSum < dealerSum) {
+        message = "You lose!";
+        losses++;
+
+    } else if (dealerSum > 21 || yourSum > dealerSum) {
+        message = "You win!";
+        wins++;
     } else {
-        message = yourSum > dealerSum ? "You win!" : "You lose!";
+        message = "Tie!";
     }
+    updateCounters();
     document.getElementById("results").innerText = message;
     document.getElementById("restart").style.display = "inline";
 }
@@ -66,12 +81,10 @@ function handleCardDealing(isPlayer) {
             dealerSum += getValue(hidden2);
             setTimeout(() => {
                 document.getElementById("dealer-sum").innerText = dealerSum;
-                let i = 0;
                 const revealInterval = setInterval(() => {
-                    if (i < 1 || dealerSum < 17) {
+                    if (dealerSum < 17) {
                         const dealerCards = document.getElementById("dealer-cards");
                         dealCard(dealerCards, dealerSum, false);
-                        i++;
                     } else {
                         clearInterval(revealInterval);
                         endGame();
@@ -114,6 +127,10 @@ function dealCard(cardsContainer, sum, isPlayer) {
             } else {
                 document.getElementById("stay").disabled = false;
                 document.getElementById("hit").disabled = yourSum >= 21;
+                if (yourSum > 21) {
+                    losses++;
+                    updateCounters();
+                }
             }
         } else {
             dealerSum = sum;
@@ -199,9 +216,16 @@ function restartGame() {
 }
 
 window.onload = () => {
+    const countersDiv = document.getElementById("counters");
+    countersDiv.innerHTML = `
+        <span>W: <span id="wins">${wins}</span></span>
+        <span>/</span>
+        <span>L: <span id="losses">${losses}</span></span>
+    `;
     buildDeck();
     shuffleDeck();
     startGame();
+
 };
 
 document.addEventListener('DOMNodeInserted', function (event) {

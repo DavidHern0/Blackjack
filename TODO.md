@@ -4,6 +4,9 @@
  [ ] Change Card Images
  [ ] Add Styles
  [ ] Sounds
+ [x] Wins/Loses Counter
+ [ ] Blackjack Counter
+ [ ] Winstreak/Max winstreak Counter
  [x] 'Play Again' Functionality
  [x] Fix 'Ace' Card
  [x] Deal Cards Animation
