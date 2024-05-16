@@ -48,6 +48,7 @@ function endGame() {
         message = yourSum > dealerSum ? "You win!" : "You lose!";
     }
     document.getElementById("results").innerText = message;
+    document.getElementById("restart").style.display = "inline";
 }
 
 function handleCardDealing(isPlayer) {
@@ -67,7 +68,7 @@ function handleCardDealing(isPlayer) {
                 document.getElementById("dealer-sum").innerText = dealerSum;
                 let i = 0;
                 const revealInterval = setInterval(() => {
-                    if (i < 1 && dealerSum < 17) {
+                    if (i < 1 || dealerSum < 17) {
                         const dealerCards = document.getElementById("dealer-cards");
                         dealCard(dealerCards, dealerSum, false);
                         i++;
@@ -163,6 +164,38 @@ function startGame() {
     for (let button of buttons) {
         button.addEventListener("click", blackjack_action);
     }
+    document.getElementById("restart").style.display = "none";
+}
+
+function restartGame() {
+    dealerSum = 0;
+    yourSum = 0;
+    aceCount = 0;
+    start = true;
+    hidden = undefined;
+    hidden2 = undefined;
+
+    document.getElementById("your-cards").innerHTML = "";
+    document.getElementById("dealer-cards").innerHTML = "";
+
+    const hiddenCard1 = document.createElement("img");
+    hiddenCard1.id = "hidden";
+    hiddenCard1.src = "./cards/back.png";
+    hiddenCard1.draggable = false;
+    document.getElementById("dealer-cards").appendChild(hiddenCard1);
+
+    const hiddenCard2 = document.createElement("img");
+    hiddenCard2.id = "hidden2";
+    hiddenCard2.src = "./cards/back.png";
+    hiddenCard2.draggable = false;
+    document.getElementById("dealer-cards").appendChild(hiddenCard2);
+
+    document.getElementById("dealer-sum").innerText = "???";
+    document.getElementById("your-sum").innerText = "0";
+    document.getElementById("results").innerText = "";
+    document.getElementById("restart").style.display = "none";
+
+    startGame();
 }
 
 window.onload = () => {

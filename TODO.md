@@ -1,9 +1,10 @@
 ## To-Do List
  [x] Game Functionality
+ [x] Dealer starts with 2 cards
  [ ] Change Card Images
  [ ] Add Styles
  [ ] Sounds
- [ ] 'Play Again' Functionality
+ [x] 'Play Again' Functionality
  [x] Fix 'Ace' Card
  [x] Deal Cards Animation
  [x] Show Cards Animation (Dealer)
