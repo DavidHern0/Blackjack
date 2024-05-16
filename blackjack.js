@@ -3,6 +3,7 @@ let dealerSum = 0,
     aceCount = 0,
     start = true,
     hidden,
+    hidden2,
     deck;
 
 function buildDeck() {
@@ -57,21 +58,26 @@ function handleCardDealing(isPlayer) {
         const playerCards = document.getElementById("your-cards");
         dealCard(playerCards, yourSum, true);
     } else {
-        setTimeout(() => {
+        if (start) {
             document.getElementById("hidden").src = `./cards/${hidden}.png`;
-            document.getElementById("dealer-sum").innerText = dealerSum;
-            let i = 0;
-            const revealInterval = setInterval(() => {
-                if (i < 1 || dealerSum < 17) {
-                    const dealerCards = document.getElementById("dealer-cards");
-                    dealCard(dealerCards, dealerSum, false);
-                    i++;
-                } else {
-                    clearInterval(revealInterval);
-                    endGame();
-                }
-            }, 1500);
-        }, 1000);
+        } else {
+            document.getElementById("hidden2").src = `./cards/${hidden2}.png`;
+            dealerSum += getValue(hidden2);
+            setTimeout(() => {
+                document.getElementById("dealer-sum").innerText = dealerSum;
+                let i = 0;
+                const revealInterval = setInterval(() => {
+                    if (i < 1 && dealerSum < 17) {
+                        const dealerCards = document.getElementById("dealer-cards");
+                        dealCard(dealerCards, dealerSum, false);
+                        i++;
+                    } else {
+                        clearInterval(revealInterval);
+                        endGame();
+                    }
+                }, 1500);
+            }, 1000);
+        }
     }
 }
 
@@ -89,8 +95,6 @@ function dealCard(cardsContainer, sum, isPlayer) {
         const cardValue = getValue(card);
         sum += cardValue;
 
-        console.log("cardValue"+cardValue)
-        console.log("sum"+sum)
         if (cardValue === 11) {
             aceCount++;
         }
@@ -142,7 +146,9 @@ function revealPlayerCards() {
 
 function startGame() {
     hidden = deck.pop();
+    hidden2 = deck.pop();
     dealerSum += getValue(hidden);
+    handleCardDealing(false);
 
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
