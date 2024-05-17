@@ -5,17 +5,21 @@ let dealerSum = 0,
     hidden,
     hidden2,
     deck,
-    wins = parseInt(localStorage.getItem('wins')) || 0
+    wins = parseInt(localStorage.getItem('wins')) || 0,
     losses = parseInt(localStorage.getItem('losses')) || 0,
-    ties = parseInt(localStorage.getItem('ties')) || 0;
+    ties = parseInt(localStorage.getItem('ties')) || 0,
+    blackjacks = parseInt(localStorage.getItem('blackjacks')) || 0;
 
 function updateCounters() {
     document.getElementById("wins").innerText = wins;
     document.getElementById("losses").innerText = losses;
+    document.getElementById("blackjacks").innerText = blackjacks;
     localStorage.setItem('wins', wins);
     localStorage.setItem('losses', losses);
     localStorage.setItem('ties', ties);
+    localStorage.setItem('blackjacks', blackjacks);
 }
+
 function buildDeck() {
     const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
     const types = ["C", "D", "H", "S"];
@@ -45,6 +49,7 @@ function hit() {
 }
 
 function stay() {
+    aceCount = 0;
     handleCardDealing(false);
 }
 
@@ -81,6 +86,16 @@ function handleCardDealing(isPlayer) {
         } else {
             document.getElementById("hidden2").src = `./cards/${hidden2}.png`;
             dealerSum += getValue(hidden2);
+            ///////////////////////////////////////////////////
+            if (getValue(hidden2) === 11) {
+                aceCount++;
+            }
+
+            while (dealerSum > 21 && aceCount > 0) {
+                dealerSum -= 10;
+                aceCount--;
+            }
+            ///////////////////////////////////////////////////
             setTimeout(() => {
                 document.getElementById("dealer-sum").innerText = dealerSum;
                 const revealInterval = setInterval(() => {
@@ -160,6 +175,10 @@ function revealPlayerCards() {
             document.getElementById("stay").disabled = false;
             document.getElementById("hit").disabled = yourSum >= 21;
             clearInterval(revealInterval);
+            if (yourSum === 21) {
+                blackjacks++;
+                updateCounters();
+            }
         }
     }, 1500);
 }
@@ -168,6 +187,11 @@ function startGame() {
     hidden = deck.pop();
     hidden2 = deck.pop();
     dealerSum += getValue(hidden);
+
+    if (getValue(hidden) === 11) {
+        aceCount++;
+    }
+
     handleCardDealing(false);
 
     document.getElementById("hit").disabled = true;
@@ -223,6 +247,8 @@ window.onload = () => {
         <span>W: <span id="wins">${wins}</span></span>
         <span>/</span>
         <span>L: <span id="losses">${losses}</span></span>
+        <br>
+        <span>BlackJack: <span id="blackjacks">${blackjacks}</span></span>
     `;
     buildDeck();
     shuffleDeck();

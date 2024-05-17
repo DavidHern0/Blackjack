@@ -5,7 +5,7 @@
  [ ] Add Styles
  [ ] Sounds
  [x] Wins/Loses Counter
- [ ] Blackjack Counter
+ [x] Blackjack Counter
  [ ] Winstreak/Max winstreak Counter
  [x] 'Play Again' Functionality
  [x] Fix 'Ace' Card
