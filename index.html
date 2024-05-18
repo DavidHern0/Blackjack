@@ -19,12 +19,15 @@
 
     <h2>You: <span id="your-sum"></span></h2>
     <div id="your-cards">
+        <img id="hiddenPlayer" src="./cards/back.png" draggable="false">
     </div>
 
     <br>
 
-    <button id="hit" class="blackjack_button">Hit</button>
-    <button id="stay" class="blackjack_button">Stay</button>
+    <div class="button-container">
+        <button id="hit" class="blackjack_button">Hit</button>
+        <button id="stay" class="blackjack_button">Stay</button>
+    </div>
 
     <h2 id="results"></h2>
     <button id="restart" class="play-again-button blackjack_button" onclick="restartGame()">Play Again</button>

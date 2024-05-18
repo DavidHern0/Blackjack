@@ -2,7 +2,7 @@
  [x] Game Functionality
  [x] Dealer starts with 2 cards
  [ ] Change Card Images
- [ ] Add Styles
+ [x] Add Styles
  [ ] Sounds
  [x] Wins/Loses Counter
  [x] Blackjack Counter

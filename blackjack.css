@@ -1,16 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap');
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    background-color: #003b1b;
+    font-family: "Domine", serif;
+    color: #fff;
     text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-#dealer-cards img, #your-cards img {
-    height: 175px;
-    width: 125px;
-    margin: 1px;
+h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
 }
 
-#hit, #stay {
-    width: 100px;
-    height: 50px;
+#dealer-cards img,
+#your-cards img {
+    width: 120px;
+    margin-right: -50px;
+}
+
+#dealer-cards,
+#your-cards {
+    margin-right: 50px;
+}
+
+#counters {
+    margin-top: 20px;
+}
+
+.button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.blackjack_button {
+    font-family: "Domine", serif;
+    background-color: #b6b610;
+    border: none;
+    color: #000;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.blackjack_button:hover {
+    background-color: #9c9c12;
+}
+
+.blackjack_button:disabled {
+    background-color: #999999;
+    cursor: not-allowed;
+}
+
+#results {
     font-size: 20px;
+    margin-top: 20px;
+}
+
+#restart {
+    display: none;
+    margin-top: 20px;
 }

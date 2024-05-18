@@ -4,6 +4,7 @@ let dealerSum = 0,
     start = true,
     hidden,
     hidden2,
+    hiddenPlayer,
     deck,
     wins = parseInt(localStorage.getItem('wins')) || 0,
     losses = parseInt(localStorage.getItem('losses')) || 0,
@@ -111,7 +112,8 @@ function handleCardDealing(isPlayer) {
             document.getElementById("hidden2").src = `./cards/${hidden2}.png`;
             dealerSum += getValue(hidden2);
             ///////////////////////////////////////////////////
-            if (getValue(hidden2) === 11) {
+
+            if (getValue(hidden) === 11 || getValue(hidden2) === 11) {
                 aceCount++;
             }
 
@@ -192,9 +194,12 @@ function revealPlayerCards() {
     const playerCards = document.getElementById("your-cards");
     let i = 0;
     const revealInterval = setInterval(() => {
-        if (i < 2) {
+        if (i === 0) {
+            document.getElementById("hiddenPlayer").src = `./cards/${hiddenPlayer}.png`;
+            const cardValue = getValue(hiddenPlayer);
+            yourSum += cardValue;
+        } else if (i === 1) {
             dealCard(playerCards, yourSum, true);
-            i++;
         } else {
             start = false;
             document.getElementById("stay").disabled = false;
@@ -205,17 +210,16 @@ function revealPlayerCards() {
                 updateCounters();
             }
         }
+        blackjack_action();
+        i++;
     }, 1250);
 }
 
 function startGame() {
     hidden = deck.pop();
     hidden2 = deck.pop();
+    hiddenPlayer = deck.pop();
     dealerSum += getValue(hidden);
-
-    if (getValue(hidden) === 11) {
-        aceCount++;
-    }
 
     handleCardDealing(false);
 
@@ -242,6 +246,7 @@ function restartGame() {
     start = true;
     hidden = undefined;
     hidden2 = undefined;
+    hiddenPlayer = undefined;
 
     document.getElementById("your-cards").innerHTML = "";
     document.getElementById("dealer-cards").innerHTML = "";
@@ -257,6 +262,12 @@ function restartGame() {
     hiddenCard2.src = "./cards/back.png";
     hiddenCard2.draggable = false;
     document.getElementById("dealer-cards").appendChild(hiddenCard2);
+
+    const hiddenPlayerCard = document.createElement("img");
+    hiddenPlayerCard.id = "hiddenPlayer";
+    hiddenPlayerCard.src = "./cards/back.png";
+    hiddenPlayerCard.draggable = false;
+    document.getElementById("your-cards").appendChild(hiddenPlayerCard);
 
     document.getElementById("dealer-sum").innerText = "???";
     document.getElementById("your-sum").innerText = "0";
