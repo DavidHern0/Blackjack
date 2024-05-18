@@ -6,7 +6,7 @@
  [ ] Sounds
  [x] Wins/Loses Counter
  [x] Blackjack Counter
- [ ] Winstreak/Max winstreak Counter
+ [x] Winstreak/Max winstreak Counter
  [x] 'Play Again' Functionality
  [x] Fix 'Ace' Card
  [x] Deal Cards Animation

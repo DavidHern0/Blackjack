@@ -8,17 +8,25 @@ let dealerSum = 0,
     wins = parseInt(localStorage.getItem('wins')) || 0,
     losses = parseInt(localStorage.getItem('losses')) || 0,
     ties = parseInt(localStorage.getItem('ties')) || 0,
-    blackjacks = parseInt(localStorage.getItem('blackjacks')) || 0;
+    blackjacks = parseInt(localStorage.getItem('blackjacks')) || 0,
+    winStreak = parseInt(localStorage.getItem('winStreak')) || 0,
+    maxWinStreak = parseInt(localStorage.getItem('maxWinStreak')) || 0;
 
-function updateCounters() {
-    document.getElementById("wins").innerText = wins;
-    document.getElementById("losses").innerText = losses;
-    document.getElementById("blackjacks").innerText = blackjacks;
-    localStorage.setItem('wins', wins);
-    localStorage.setItem('losses', losses);
-    localStorage.setItem('ties', ties);
-    localStorage.setItem('blackjacks', blackjacks);
-}
+
+    function updateCounters() {
+        document.getElementById("wins").innerText = wins;
+        document.getElementById("losses").innerText = losses;
+        document.getElementById("blackjacks").innerText = blackjacks;
+        document.getElementById("winStreak").innerText = winStreak;
+        document.getElementById("maxWinStreak").innerText = maxWinStreak;
+        
+        localStorage.setItem('wins', wins);
+        localStorage.setItem('losses', losses);
+        localStorage.setItem('ties', ties);
+        localStorage.setItem('blackjacks', blackjacks);
+        localStorage.setItem('winStreak', winStreak);
+        localStorage.setItem('maxWinStreak', maxWinStreak);
+    }    
 
 function buildDeck() {
     const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
@@ -60,10 +68,14 @@ function endGame() {
     } else if (dealerSum <= 21 && yourSum < dealerSum) {
         message = "You lose!";
         losses++;
-
+        winStreak = 0
     } else if (dealerSum > 21 || yourSum > dealerSum) {
         message = "You win!";
         wins++;
+        winStreak++;
+        if (winStreak > maxWinStreak) {
+            maxWinStreak = winStreak;
+        }
     } else {
         message = "Tie!";
         ties++;
@@ -146,6 +158,7 @@ function dealCard(cardsContainer, sum, isPlayer) {
                 document.getElementById("hit").disabled = yourSum >= 21;
                 if (yourSum > 21) {
                     losses++;
+                    winStreak = 0
                     updateCounters();
                 }
             }
@@ -249,11 +262,14 @@ window.onload = () => {
         <span>L: <span id="losses">${losses}</span></span>
         <br>
         <span>BlackJack: <span id="blackjacks">${blackjacks}</span></span>
+        <br>
+        <span>Win Streak: <span id="winStreak">${winStreak}</span></span>
+        <br>
+        <span>Max Win Streak: <span id="maxWinStreak">${maxWinStreak}</span></span>
     `;
     buildDeck();
     shuffleDeck();
     startGame();
-
 };
 
 document.addEventListener('DOMNodeInserted', function (event) {
