@@ -30,18 +30,27 @@
     <button id="restart" class="play-again-button blackjack_button" onclick="restartGame()">Play Again</button>
     <br>
     <div id="counters">
-        <span>W: <span id="wins">0</span></span>
-        <span>/</span>
-        <span>L: <span id="losses">0</span></span>
+
+        <span id="historal-container">
+            <span>W: <span id="wins">0</span></span>
+            <span>/</span>
+            <span>L: <span id="losses">0</span></span>
+        </span>
         <br>
-        <span>BlackJack: <span id="blackjacks">0</span></span>
+        <span id="blackjacks-container">
+            <span>BlackJack: <span id="blackjacks">0</span></span>
+        </span>
+        <span id="maxWinStreak-container">
+            <span>Max Win Streak: <span id="maxWinStreak">0</span></span>
+        </span>
         <br>
-        <span>Win Streak: <span id="winStreak">0</span></span>
+        <span id="winStreak-container">
+            <span>Win Streak: <span id="winStreak">0</span></span>
+        </span>
         <br>
-        <span>Max Win Streak: <span id="maxWinStreak">0</span></span>
     </div>
-    
-    
+
+
 </body>
 
 </html>

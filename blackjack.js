@@ -9,24 +9,36 @@ let dealerSum = 0,
     losses = parseInt(localStorage.getItem('losses')) || 0,
     ties = parseInt(localStorage.getItem('ties')) || 0,
     blackjacks = parseInt(localStorage.getItem('blackjacks')) || 0,
-    winStreak = parseInt(localStorage.getItem('winStreak')) || 0,
-    maxWinStreak = parseInt(localStorage.getItem('maxWinStreak')) || 0;
+    maxWinStreak = parseInt(localStorage.getItem('maxWinStreak')) || 0,
+    winStreak = parseInt(localStorage.getItem('winStreak')) || 0;
 
+function updateCounters() {
+    document.getElementById("wins").innerText = wins;
+    document.getElementById("losses").innerText = losses;
 
-    function updateCounters() {
-        document.getElementById("wins").innerText = wins;
-        document.getElementById("losses").innerText = losses;
-        document.getElementById("blackjacks").innerText = blackjacks;
-        document.getElementById("winStreak").innerText = winStreak;
-        document.getElementById("maxWinStreak").innerText = maxWinStreak;
-        
-        localStorage.setItem('wins', wins);
-        localStorage.setItem('losses', losses);
-        localStorage.setItem('ties', ties);
-        localStorage.setItem('blackjacks', blackjacks);
-        localStorage.setItem('winStreak', winStreak);
-        localStorage.setItem('maxWinStreak', maxWinStreak);
-    }    
+    showCounter("blackjacks", blackjacks);
+    showCounter("maxWinStreak", maxWinStreak, maxWinStreak > 1);
+    showCounter("winStreak", winStreak, winStreak > 1);
+
+    localStorage.setItem('wins', wins);
+    localStorage.setItem('losses', losses);
+    localStorage.setItem('ties', ties);
+    localStorage.setItem('blackjacks', blackjacks);
+    localStorage.setItem('maxWinStreak', maxWinStreak);
+    localStorage.setItem('winStreak', winStreak);
+}
+
+function showCounter(counterId, value, condition = true) {
+    const counterElement = document.getElementById(counterId);
+    const containerElement = document.getElementById(`${counterId}-container`);
+
+    if (condition && value > 0) {
+        containerElement.style.display = 'inline';
+        counterElement.innerText = value;
+    } else {
+        containerElement.style.display = 'none';
+    }
+}
 
 function buildDeck() {
     const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
@@ -118,8 +130,8 @@ function handleCardDealing(isPlayer) {
                         clearInterval(revealInterval);
                         endGame();
                     }
-                }, 1500);
-            }, 1000);
+                }, 1250);
+            }, 750);
         }
     }
 }
@@ -166,7 +178,7 @@ function dealCard(cardsContainer, sum, isPlayer) {
             dealerSum = sum;
             document.getElementById("dealer-sum").innerText = dealerSum;
         }
-    }, 1000);
+    }, 750);
 }
 
 function blackjack_action() {
@@ -193,7 +205,7 @@ function revealPlayerCards() {
                 updateCounters();
             }
         }
-    }, 1500);
+    }, 1250);
 }
 
 function startGame() {
@@ -255,18 +267,7 @@ function restartGame() {
 }
 
 window.onload = () => {
-    const countersDiv = document.getElementById("counters");
-    countersDiv.innerHTML = `
-        <span>W: <span id="wins">${wins}</span></span>
-        <span>/</span>
-        <span>L: <span id="losses">${losses}</span></span>
-        <br>
-        <span>BlackJack: <span id="blackjacks">${blackjacks}</span></span>
-        <br>
-        <span>Win Streak: <span id="winStreak">${winStreak}</span></span>
-        <br>
-        <span>Max Win Streak: <span id="maxWinStreak">${maxWinStreak}</span></span>
-    `;
+    updateCounters();
     buildDeck();
     shuffleDeck();
     startGame();
