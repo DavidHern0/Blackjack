@@ -4,54 +4,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="language" content="English">
+    <meta name="description" content="Play the classic game of Blackjack online. Test your luck and skills. Game for free with no ads. More at https://github.com/DavidHern0">
+    <meta name="keywords" content="Blackjack, card game, casino, gambling, 21, twenty-one, blackjack online, play blackjack, blackjack rules, blackjack strategy, blackjack tips, blackjack guide, blackjack table, blackjack dealer, blackjack cards, blackjack hand, blackjack chips, blackjack betting, blackjack odds, free, no ads">
+    <meta name="author" content="DavidHern0">
+    <meta name="date" content="2024-05-19">
+
+    <meta itemprop="name" content="♠️♥️♣️♦️ Blackjack ♠️♥️♣️♦️">
+    <meta itemprop="description" content="Play the classic game of Blackjack online. Test your luck and skills. Game for free with no ads. More at https://github.com/DavidHern0">
+    <meta itemprop="image" content="davidhern0.github.io/Blackjack/src/favicon.png">
+
+    <meta property="og:url" content="https://davidhern0.github.io/Blackjack">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="♠️♥️♣️♦️ Blackjack ♠️♥️♣️♦️">
+    <meta property="og:description" content="Play the classic game of Blackjack online. Test your luck and skills. Game for free with no ads. More at https://github.com/DavidHern0">
+    <meta property="og:image" content="davidhern0.github.io/Blackjack/src/favicon.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="♠️♥️♣️♦️ Blackjack ♠️♥️♣️♦️">
+    <meta name="twitter:description" content="Play the classic game of Blackjack online. Test your luck and skills. Game for free with no ads. More at https://github.com/DavidHern0">
+    <meta name="twitter:image" content="davidhern0.github.io/Blackjack/src/favicon.png">
+
     <link rel="stylesheet" href="blackjack.css">
     <link rel="icon" type="image/png" href="./cards/back.png">
     <link rel="icon" type="image/png" href="./src/favicon.png">
     <script defer src="blackjack.js"></script>
-    <title>Blackjack</title>
+
+    <title>Play Blackjack 21 Online for Free!</title>
+    <meta name="description" content="Play the classic game of Blackjack online. Test your luck and skills. Game for free with no ads. More at https://github.com/DavidHern0 Game for free with no ads. More at https://github.com/DavidHern0">
 </head>
 
 <body>
-    <h2>Dealer: <span id="dealer-sum"></span></h2>
-    <div id="dealer-cards">
-        <img id="hidden" src="./cards/back.png" draggable="false">
-        <img id="hidden2" src="./cards/back.png" draggable="false">
-    </div>
+    <main>
+        <h2>Dealer: <span id="dealer-sum"></span></h2>
+        <div id="dealer-cards">
+            <img id="hidden" src="./cards/back.png" draggable="false">
+            <img id="hidden2" src="./cards/back.png" draggable="false">
+        </div>
 
-    <h2>You: <span id="your-sum"></span></h2>
-    <div id="your-cards">
-        <img id="hiddenPlayer" src="./cards/back.png" draggable="false">
-    </div>
+        <h2>You: <span id="your-sum"></span></h2>
+        <div id="your-cards">
+            <img id="hiddenPlayer" src="./cards/back.png" draggable="false">
+        </div>
 
-    <br>
+        <br>
 
-    <div class="button-container">
-        <button id="hit" class="blackjack_button">Hit</button>
-        <button id="stay" class="blackjack_button">Stay</button>
-    </div>
+        <div class="button-container">
+            <button id="hit" class="blackjack_button">Hit</button>
+            <button id="stay" class="blackjack_button">Stay</button>
+        </div>
 
-    <h2 id="results"></h2>
-    <button id="restart" class="play-again-button blackjack_button" onclick="restartGame()">Play Again</button>
-    <div id="counters">
-        <span id="historal-container">
-            <span>W: <span id="wins">0</span></span>
-            <span>/</span>
-            <span>L: <span id="losses">0</span></span>
-        </span>
-        <br>
-        <span id="blackjacks-container">
-            <span>BlackJack: <span id="blackjacks">0</span></span>
-        </span>
-        <br>
-        <span id="maxWinStreak-container">
-            <span>Max Win Streak: <span id="maxWinStreak">0</span></span>
-        </span>
-        <br>
-        <span id="winStreak-container">
-            <span>Win Streak: <span id="winStreak">0</span></span>
-        </span>
-        <br>
-    </div>
+        <h2 id="results"></h2>
+        <button id="restart" class="play-again-button blackjack_button" onclick="restartGame()">Play Again</button>
+    </main>
+
+    <footer>
+        <div id="counters">
+            <span id="historal-container">
+                <span>W: <span id="wins">0</span></span>
+                <span>/</span>
+                <span>L: <span id="losses">0</span></span>
+            </span>
+            <br>
+            <span id="blackjacks-container">
+                <span>BlackJack: <span id="blackjacks">0</span></span>
+            </span>
+            <br>
+            <span id="maxWinStreak-container">
+                <span>Max Win Streak: <span id="maxWinStreak">0</span></span>
+            </span>
+            <br>
+            <span id="winStreak-container">
+                <span>Win Streak: <span id="winStreak">0</span></span>
+            </span>
+            <br>
+        </div>
+        <p>&copy; 2024 DavidHern0. Made with JavaScript and coffee</p>
+    </footer>
 
     <button id="muteButton">
         <img id="muteIcon" src="src/volume_on.png" alt="Mute">
