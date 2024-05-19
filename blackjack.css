@@ -30,6 +30,14 @@ h2 {
     margin-right: 50px;
 }
 
+@media screen and (max-width: 600px) {
+    #dealer-cards img,
+    #your-cards img {
+        margin-right: -60px;
+    }
+}
+
+
 #counters {
     margin-top: 20px;
 }
@@ -66,9 +74,10 @@ h2 {
 #results {
     font-size: 20px;
     margin-top: 20px;
+    min-height: 24px;
 }
 
 #restart {
-    display: none;
+    visibility: hidden;
     margin-top: 20px;
 }

@@ -41,6 +41,35 @@ function showCounter(counterId, value, condition = true) {
     }
 }
 
+function adjustMargin() {
+    if (window.matchMedia('(max-width: 600px)').matches) {
+        const yourCards = document.getElementById('your-cards');
+        const dealerCards = document.getElementById('dealer-cards');
+
+        const yourCardImgs = yourCards.querySelectorAll('img');
+        const dealerCardImgs = dealerCards.querySelectorAll('img');
+        if (yourCardImgs.length > 4) {
+            yourCardImgs.forEach(function (img) {
+                img.style.marginRight = '-75px';
+            });
+        }
+
+        if (dealerCardImgs.length > 4) {
+            dealerCardImgs.forEach(function (img) {
+                img.style.marginRight = '-75px';
+            });
+        }
+    } else {
+        yourCardImgs.forEach(function (img) {
+            img.style.marginRight = '-50px';
+        });
+
+        dealerCardImgs.forEach(function (img) {
+            img.style.marginRight = '-50px';
+        });
+    }
+}
+
 function buildDeck() {
     const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
     const types = ["C", "D", "H", "S"];
@@ -81,7 +110,7 @@ function endGame() {
     } else if (dealerSum <= 21 && yourSum < dealerSum) {
         message = "You lose!";
         losses++;
-        winStreak = 0
+        winStreak = 0;
     } else if (dealerSum > 21 || yourSum > dealerSum) {
         message = "You win!";
         wins++;
@@ -95,7 +124,7 @@ function endGame() {
     }
     updateCounters();
     document.getElementById("results").innerText = message;
-    document.getElementById("restart").style.display = "inline";
+    document.getElementById("restart").style.visibility = "visible";
 }
 
 function handleCardDealing(isPlayer) {
@@ -111,8 +140,6 @@ function handleCardDealing(isPlayer) {
         } else {
             document.getElementById("hidden2").src = `./cards/${hidden2}.png`;
             dealerSum += getValue(hidden2);
-            ///////////////////////////////////////////////////
-
             if (getValue(hidden) === 11 || getValue(hidden2) === 11) {
                 aceCount++;
             }
@@ -121,7 +148,7 @@ function handleCardDealing(isPlayer) {
                 dealerSum -= 10;
                 aceCount--;
             }
-            ///////////////////////////////////////////////////
+
             setTimeout(() => {
                 document.getElementById("dealer-sum").innerText = dealerSum;
                 const revealInterval = setInterval(() => {
@@ -172,11 +199,12 @@ function dealCard(cardsContainer, sum, isPlayer) {
                 document.getElementById("hit").disabled = yourSum >= 21;
                 if (yourSum > 21) {
                     losses++;
-                    winStreak = 0
+                    winStreak = 0;
                     updateCounters();
                 }
             }
         } else {
+            adjustMargin();
             dealerSum = sum;
             document.getElementById("dealer-sum").innerText = dealerSum;
         }
@@ -184,6 +212,7 @@ function dealCard(cardsContainer, sum, isPlayer) {
 }
 
 function blackjack_action() {
+    adjustMargin();
     if (yourSum >= 21) {
         document.getElementById("hit").disabled = true;
     }
@@ -236,7 +265,7 @@ function startGame() {
     for (let button of buttons) {
         button.addEventListener("click", blackjack_action);
     }
-    document.getElementById("restart").style.display = "none";
+    document.getElementById("restart").style.visibility = "hidden";
 }
 
 function restartGame() {
@@ -272,7 +301,7 @@ function restartGame() {
     document.getElementById("dealer-sum").innerText = "???";
     document.getElementById("your-sum").innerText = "0";
     document.getElementById("results").innerText = "";
-    document.getElementById("restart").style.display = "none";
+    document.getElementById("restart").style.visibility = "hidden";
 
     startGame();
 }
@@ -289,3 +318,4 @@ document.addEventListener('DOMNodeInserted', function (event) {
         event.target.setAttribute("draggable", "false");
     }
 });
+window.addEventListener('resize', adjustMargin);

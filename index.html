@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="blackjack.css">
-    <script src="blackjack.js"></script>
+    <script defer src="blackjack.js"></script>
     <title>BlackJack</title>
 </head>
 
@@ -15,7 +15,6 @@
         <img id="hidden" src="./cards/back.png" draggable="false">
         <img id="hidden2" src="./cards/back.png" draggable="false">
     </div>
-
 
     <h2>You: <span id="your-sum"></span></h2>
     <div id="your-cards">
@@ -33,7 +32,6 @@
     <button id="restart" class="play-again-button blackjack_button" onclick="restartGame()">Play Again</button>
     <br>
     <div id="counters">
-
         <span id="historal-container">
             <span>W: <span id="wins">0</span></span>
             <span>/</span>
@@ -53,8 +51,6 @@
         </span>
         <br>
     </div>
-
-
 </body>
 
 </html>
