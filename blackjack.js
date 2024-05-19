@@ -269,6 +269,9 @@ function revealPlayerCards() {
             flipSound.play();
             document.getElementById("hiddenPlayer").src = `./cards/${hiddenPlayer}.png`;
             const cardValue = getValue(hiddenPlayer);
+            if (cardValue === 11) {
+                aceCount++;
+            }
             yourSum += cardValue;
         } else if (i === 1) {
             dealCard(playerCards, yourSum, true);
