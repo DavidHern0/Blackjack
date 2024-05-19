@@ -42,12 +42,12 @@ function showCounter(counterId, value, condition = true) {
 }
 
 function adjustMargin() {
-    if (window.matchMedia('(max-width: 600px)').matches) {
-        const yourCards = document.getElementById('your-cards');
-        const dealerCards = document.getElementById('dealer-cards');
+    const yourCards = document.getElementById('your-cards');
+    const dealerCards = document.getElementById('dealer-cards');
 
-        const yourCardImgs = yourCards.querySelectorAll('img');
-        const dealerCardImgs = dealerCards.querySelectorAll('img');
+    const yourCardImgs = yourCards.querySelectorAll('img');
+    const dealerCardImgs = dealerCards.querySelectorAll('img');
+    if (window.matchMedia('(max-width: 600px)').matches) {
         if (yourCardImgs.length > 4) {
             yourCardImgs.forEach(function (img) {
                 img.style.marginRight = '-75px';
@@ -303,6 +303,8 @@ function restartGame() {
     document.getElementById("results").innerText = "";
     document.getElementById("restart").style.visibility = "hidden";
 
+    buildDeck();
+    shuffleDeck();
     startGame();
 }
 
