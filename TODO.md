@@ -1,7 +1,7 @@
 ## To-Do List
  [x] Game Functionality
  [x] Dealer starts with 2 cards
- [ ] Change Card Images
+ [x] Add Favicon
  [x] Add Styles
  [x] Sounds
  [x] Wins/Loses Counter
@@ -15,6 +15,4 @@
 
  ## To-Do List (Temporary)
  [x] Optimize Show Cards Code
- [ ] Optimize all Code
- [ ] Fix Deprecated Code
- [ ] Fix Code
+ [x] Optimize all Code
