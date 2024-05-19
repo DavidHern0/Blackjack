@@ -3,7 +3,7 @@
  [x] Dealer starts with 2 cards
  [ ] Change Card Images
  [x] Add Styles
- [ ] Sounds
+ [x] Sounds
  [x] Wins/Loses Counter
  [x] Blackjack Counter
  [x] Winstreak/Max winstreak Counter

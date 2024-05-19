@@ -11,7 +11,44 @@ let dealerSum = 0,
     ties = parseInt(localStorage.getItem('ties')) || 0,
     blackjacks = parseInt(localStorage.getItem('blackjacks')) || 0,
     maxWinStreak = parseInt(localStorage.getItem('maxWinStreak')) || 0,
-    winStreak = parseInt(localStorage.getItem('winStreak')) || 0;
+    winStreak = parseInt(localStorage.getItem('winStreak')) || 0,
+    isMuted = parseInt(localStorage.getItem('isMuted')) || 0;
+
+const flipSound = new Audio("src/card-sounds-35956.mp3"),
+    positiveBeep = new Audio("src/positive_beeps-85504.mp3"),
+    negativeBeep = new Audio("src/negative_beeps-6008.mp3"),
+    originalVolume = 0.05,
+    muteButton = document.getElementById("muteButton"),
+    muteIcon = document.getElementById("muteIcon");
+
+flipSound.volume = originalVolume;
+positiveBeep.volume = originalVolume;
+negativeBeep.volume = originalVolume;
+
+function toggleMute() {
+    if (isMuted == 1) {
+        muteIcon.src = "src/volume_off.png";
+        flipSound.volume = 0;
+        positiveBeep.volume = 0;
+        negativeBeep.volume = 0;
+    } else {
+        muteIcon.src = "src/volume_on.png";
+        flipSound.volume = originalVolume;
+        positiveBeep.volume = originalVolume;
+        negativeBeep.volume = originalVolume;
+    }
+}
+
+muteButton.addEventListener("click", function () {
+    if (isMuted == 1) {
+        isMuted = 0;
+        localStorage.setItem('isMuted', 0);
+    } else {
+        isMuted = 1;
+        localStorage.setItem('isMuted', 1);
+    }
+    toggleMute();
+});
 
 function updateCounters() {
     document.getElementById("wins").innerText = wins;
@@ -107,14 +144,17 @@ function endGame() {
     let message;
     if (yourSum > 21) {
         message = "You lose!";
+        negativeBeep.play();
     } else if (dealerSum <= 21 && yourSum < dealerSum) {
         message = "You lose!";
         losses++;
         winStreak = 0;
+        negativeBeep.play();
     } else if (dealerSum > 21 || yourSum > dealerSum) {
         message = "You win!";
         wins++;
         winStreak++;
+        positiveBeep.play();
         if (winStreak > maxWinStreak) {
             maxWinStreak = winStreak;
         }
@@ -150,6 +190,7 @@ function handleCardDealing(isPlayer) {
             }
 
             setTimeout(() => {
+                flipSound.play();
                 document.getElementById("dealer-sum").innerText = dealerSum;
                 const revealInterval = setInterval(() => {
                     if (dealerSum < 17) {
@@ -171,6 +212,7 @@ function dealCard(cardsContainer, sum, isPlayer) {
     cardsContainer.appendChild(cardImg);
 
     setTimeout(() => {
+        flipSound.play();
         const card = deck.pop();
         const cardImg = document.createElement("img");
         cardImg.src = `./cards/${card}.png`;
@@ -224,6 +266,7 @@ function revealPlayerCards() {
     let i = 0;
     const revealInterval = setInterval(() => {
         if (i === 0) {
+            flipSound.play();
             document.getElementById("hiddenPlayer").src = `./cards/${hiddenPlayer}.png`;
             const cardValue = getValue(hiddenPlayer);
             yourSum += cardValue;
@@ -309,6 +352,7 @@ function restartGame() {
 }
 
 window.onload = () => {
+    toggleMute();
     updateCounters();
     buildDeck();
     shuffleDeck();
