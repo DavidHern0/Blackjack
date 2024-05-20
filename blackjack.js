@@ -232,18 +232,19 @@ function dealCard(cardsContainer, sum, isPlayer) {
 
         if (isPlayer) {
             yourSum = sum;
-            document.getElementById("your-sum").innerText = yourSum;
-            if (start) {
+            document.getElementById("your-sum").innerText = yourSum;    
+            document.getElementById("stay").disabled = false;
+            document.getElementById("hit").disabled = false;
+            if (yourSum > 21) {
                 document.getElementById("hit").disabled = true;
                 document.getElementById("stay").disabled = true;
-            } else {
-                document.getElementById("stay").disabled = false;
-                document.getElementById("hit").disabled = yourSum >= 21;
-                if (yourSum > 21) {
-                    losses++;
-                    winStreak = 0;
-                    updateCounters();
-                }
+                losses++;
+                winStreak = 0;
+                updateCounters();
+
+                setTimeout(function () {
+                    stay();
+                }, 1750);
             }
         } else {
             adjustMargin();
