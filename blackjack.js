@@ -206,6 +206,22 @@ function handleCardDealing(isPlayer) {
     }
 }
 
+function forceStay(caseType) {
+    document.getElementById("hit").disabled = true;
+    document.getElementById("stay").disabled = true;
+    if (caseType === 'BLACKJACK') {
+        blackjacks++;
+    } else {
+        losses++;
+        winStreak = 0;
+    }
+    updateCounters();
+
+    setTimeout(function () {
+        stay();
+    }, 1750);
+}
+
 function dealCard(cardsContainer, sum, isPlayer) {
     const cardImg = document.createElement("img");
     cardImg.src = "./cards/back.png";
@@ -233,18 +249,11 @@ function dealCard(cardsContainer, sum, isPlayer) {
         if (isPlayer) {
             yourSum = sum;
             document.getElementById("your-sum").innerText = yourSum;
-            document.getElementById("stay").disabled = false;
-            document.getElementById("hit").disabled = false;
             if (yourSum > 21) {
-                document.getElementById("hit").disabled = true;
-                document.getElementById("stay").disabled = true;
-                losses++;
-                winStreak = 0;
-                updateCounters();
-
-                setTimeout(function () {
-                    stay();
-                }, 1750);
+                forceStay("LOSE")
+            } else {
+                document.getElementById("stay").disabled = false;
+                document.getElementById("hit").disabled = false;
             }
         } else {
             adjustMargin();
@@ -278,12 +287,12 @@ function revealPlayerCards() {
             dealCard(playerCards, yourSum, true);
         } else {
             start = false;
-            document.getElementById("stay").disabled = false;
-            document.getElementById("hit").disabled = yourSum >= 21;
             clearInterval(revealInterval);
             if (yourSum === 21) {
-                blackjacks++;
-                updateCounters();
+                forceStay("BLACKJACK")
+            } else {
+                document.getElementById("stay").disabled = false;
+                document.getElementById("hit").disabled = yourSum >= 21;
             }
         }
         blackjack_action();
