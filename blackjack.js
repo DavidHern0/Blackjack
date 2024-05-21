@@ -359,7 +359,7 @@ document.getElementById("shareButton").addEventListener("click", function () {
     if (navigator.share) {
         navigator.share({
             title: '♠️♥️♣️♦️ Blackjack ♠️♥️♣️♦️',
-            text: 'Play the classic game of Blackjack online. Test your luck and skills. Game for free with no ads. More at https://github.com/DavidHern0',
+            text: 'Play the classic game of Blackjack online. Test your luck and skills. Game for free with no ads',
             url: 'https://davidhern0.github.io/Blackjack'
         }).then(() => {
             console.log('Thanks for sharing!');
