@@ -93,11 +93,27 @@ h2 {
     z-index: 9999;
 }
 
-#muteIcon {
-    width: 50px;
-    height: 50px;
+footer p,
+footer a {
+    color: #0c4d29;
 }
 
-footer p, footer a {
-    color: #0c4d29;
+.footer-buttons {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.footer-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 9999;
+}
+
+.footer-button img {
+    width: 30px;
+    height: 30px;
 }

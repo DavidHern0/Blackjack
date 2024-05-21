@@ -232,7 +232,7 @@ function dealCard(cardsContainer, sum, isPlayer) {
 
         if (isPlayer) {
             yourSum = sum;
-            document.getElementById("your-sum").innerText = yourSum;    
+            document.getElementById("your-sum").innerText = yourSum;
             document.getElementById("stay").disabled = false;
             document.getElementById("hit").disabled = false;
             if (yourSum > 21) {
@@ -354,6 +354,23 @@ function restartGame() {
     shuffleDeck();
     startGame();
 }
+
+document.getElementById("shareButton").addEventListener("click", function () {
+    if (navigator.share) {
+        navigator.share({
+            title: '♠️♥️♣️♦️ Blackjack ♠️♥️♣️♦️',
+            text: 'Play the classic game of Blackjack online. Test your luck and skills. Game for free with no ads. More at https://github.com/DavidHern0',
+            url: 'https://davidhern0.github.io/Blackjack'
+        }).then(() => {
+            console.log('Thanks for sharing!');
+        }).catch(err => {
+            console.log('Error while sharing:', err);
+        });
+    } else {
+        alert('Web Share API is not supported in your browser.');
+    }
+});
+
 
 window.onload = () => {
     toggleMute();
